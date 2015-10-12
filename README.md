@@ -11,9 +11,11 @@ Generate a sitemap index and its related sitemaps using data from your database.
 Features
 -------------
 
-
-- handles the slicing of your entries into multiple sitemaps
+- creates the sitemaps files automatically from the db tables rows, according to your business rules
+- automatically creates the appropriate index sitemap file   
 - supports Google video, image and mobile sitemap extensions
+- mapping tables to sitemaps file is easy
+- Fetches your data using slices of arbitrary width (might be helpful if you have a lot of data)    
 
 
 
@@ -29,29 +31,76 @@ The solution
 
 The Sitemap Slicer might help you.
 Basically, it reads data from your database, turns it into sitemaps, and creates the corresponding sitemap index.<br>
-We can specify how many sitemap entries max we want per sitemap (it's called the sliceWidth).
 
 
 One possible usage of the Sitemap Slicer is to create a script that recreates the whole sitemap of your application,
 and you call this script every day at 3:00am for instance (using a cron job).
 
-   
-How many entries per sitemap (use the slices)?
+
+
+
+The big picture
+--------------------
+![Sitemap slicer overview](https://github.com/lingtalfi/sitemapslicer/blob/master/doc/sitemap-slicer-overview.jpg "Sitemap Slicer overview")
+
+
+The schema shows how objects interact with each others.
+At the top of the schema, we have 3 tables t1, t2 and t3.
+Each table contain an arbitrary number of rows that we want to convert into sitemap entries.
+
+Instead of retrieving all the rows in one time, we will use slices (rows slices).
+We define an arbitrary sliceWidth number, which is the max number of rows per slice. 
+From there, the Sitemap Slicer will figure out how many times it needs to repeat the operation to consume all the rows of our table.
+
+Imagine we had a table with one million entries, we could set the sliceWidth to 200000, to divide the fetching in 5 operations rather 
+than a big one.
+
+On the schema, we use a symbolic sliceWidth of 10 for the sake of clarity.
+
+
+Now that the sliceWidth is defined, we need to map our tables to sitemap files.
+In the schema, we map table t1 to a sitemap called sitemap.abc.xml, and tables t2 and t3 to a sitemap file named sitemap.def.xml.
+Depending on your organization, you will want to map tables differently.
+
+
+Once we have configured our objects, we just need to call the Sitemap Slicer's execute method to get our sitemaps and sitemap index
+generated.
+But the schema shows us what happens under the hood.
+
+In particular, it shows us that the sitemap bound to table t1, named sitemap.abc.xml, could be actually converted to multiple sitemaps:
+sitemap.abc.xml, sitemap.abc2.xml, sitemap.abc3.xml, and so on, depending on a setting called max entries per sitemap.
+This is done automatically for us and we don't have to worry about it, but it might help to be aware of it.
+
+Also, the schema shows us that any sitemap file is automatically referenced inside the sitemap index file, which is the final product of the 
+SitemapSlicer.
+ 
+
+
+  
+How many entries per sitemap, an example with numbers
 -------------------------
 
-One benefit of using the Sitemap Slicer is that it let us decide how many entries we want per sitemap.
+You don't need to read this section, unless you are interested by the internal mechanisms of the Sitemap Slicer.
 
+So let's say that we have a sliceWidth of 200000, which means that the Sitemap Slicer will retrieve rows in our database by
+slice of 200000 entries at a time.
 
-Let's say that you have 3 tables in your application, called t1, t2 and t3 and from which you want to generate sitemaps.
+Let's say that we have 3 tables in our application, called t1, t2 and t3 and from which we want to generate sitemaps.
 
 - t1 contains 12000 entries
 - t2 contains 3000 entries
 - t3 contains 24000 entries
 
-We could set a **sliceWidth** (how many entries max per sitemap) of 50000, then we would end up with a big sitemap file containing the entries from all the tables
-t1, t2 and t3.
 
-We could also set a sliceWidth of 10000, then you would end up with the following files (by default):
+Independently from the sliceWidth setting, we can also choose the max number of entries per sitemap.
+Let's say that maxEntriesPerSitemap is 50000, then after calling the execute method of the Sitemap Slicer, we would end up with 
+one big sitemap file containing the entries from all the tables t1, t2 and t3.
+
+- sitemap.xml   (containing 39000 entries: 12000 entries from t1, 3000 entries from t2, 24000 from t3) 
+
+
+
+Now imagine we reduce the maxEntriesPerSitemap to 10000, then we would end up with the following files (by default):
 
 - sitemap.xml    (containing 10000 entries from t1)
 - sitemap2.xml   (containing 10000 entries: 2000 entries from t1, 3000 from t2 and 5000 from t3)
@@ -59,21 +108,8 @@ We could also set a sliceWidth of 10000, then you would end up with the followin
 - sitemap4.xml   (containing 9000 entries from t3)
 
 
-We can also decide to map tables t1 and t2 to a sitemap.xml file, and table t3 to a video.sitemap.xml file.
-With a sliceWidth of 10000, the Sitemap Slicer would create the following files:
 
-- sitemap.xml           (containing 10000 entries from t1)
-- sitemap2.xml          (containing 5000 entries: 2000 entries from t1, 3000 entries from t2)
-- video.sitemap.xml     (containing 10000 entries from t3)
-- video.sitemap2.xml    (containing 10000 entries from t3)
-- video.sitemap3.xml    (containing 4000 entries from t3)
-
-
-So, with the Sitemap Slicer, we have that kind of control.
-
-
-Note: in all above examples, the corresponding **sitemap index** file is generated automatically
-
+Actually, this is automatically handled by the Sitemap Slicer, we don't need to worry.
 
   
   
@@ -87,23 +123,6 @@ The other example is just a variation of the first example.
 Example 1: convert one table into one sitemap
 -------------------------
 
-Actually, the title should be: 
-    Example 1: convert one table into one base sitemap
-    
-    
-### What's a base sitemap?
-
-A base sitemap is a sitemap (file), except that if you store too many entries (defined by the sliceWidth) in your base sitemap,
-the Sitemap Slicer automatically divides it into many sitemaps files.
-
-Actually, we've already seen an example of this in the previous sections: sitemap.xml is the base sitemap after which other sitemaps 
-were named: sitemap2.xml, sitemap3.xml, ... 
-
-
-
-    
-    
-That said, let's now show the first example's code.
 
 
 ```php
@@ -124,7 +143,8 @@ require_once "bigbang.php"; // this is the famous bigbang oneliner
 
 
 // this is the sliceWidth
-$n = 10000;
+$n = 150000;
+$maxEntriesPerSitemap = 10000;
 
 // this is the pdo connection that I use in this example application
 QuickPdo::setConnection(
@@ -148,6 +168,7 @@ AuthorSitemapIndexSlicer::create()
         return 'http://mysite.com/' . basename($fileName);
     })
     ->defaultSliceWidth($n)
+    ->maxSitemapEntries($maxEntriesPerSitemap)
     ->addSitemapSlice(AuthorSitemapSlice::create()
             ->sliceWidth($n)
             ->file('idea.sitemap{n}.xml')
@@ -193,7 +214,10 @@ The oneliner technique is explained in the
 [portable autoloader](https://github.com/lingtalfi/universe/blob/master/planets/TheScientist/convention.portableAutoloader.eng.md)
 document.
 
-Then I define my sliceWidth, n=10000.
+Then I define my sliceWidth, n=150000;
+then I define the maxEntriesPerSitemap=10000;
+
+
 
 Then I define a pdo connection. 
 I use 
@@ -237,23 +261,36 @@ Let you define a callback that converts a sitemap file path to a sitemap url (wh
 
 ### the AuthorSitemapIndexSlicer.defaultSliceWidth method
 
-Define the default sliceWidth to use for every Sitemap Slice bound to the AuthorSitemapIndexSlicer object.
-We will find out more about Sitemap Slice object soon.
+Define the default sliceWidth to use.
+Every Sitemap Slice bound to the AuthorSitemapIndexSlicer object can either override this parameter, or inherit the default (by default).
 
 
 ### the AuthorSitemapIndexSlicer.addSitemapSlice method
 
 Adds a Sitemap Slice to your Sitemap Slicer.<br>
 One can represent a Sitemap Slice as an object that will be eventually converted to 
-a **base sitemap file** (remember what the base sitemap is?).
+a sitemap file.
 
 
 
 ### the AuthorSitemapSlice.sliceWidth method
 
-Define the sliceWidth for a specific Sitemap Slice.
-In the above example, it was used only to show you the different methods of the Sitemap Slice object
-(because the sliceWidth was already defined with the defaultSliceWidth method of the Sitemap Slicer object).
+Overrides the default sliceWidth for a specific Sitemap Slice.
+
+
+
+### the AuthorSitemapSlice.maxEntriesPerSitemap method
+
+
+Define the max number of entries per sitemap.
+This method is specific to the AuthorSitemapSlice class and is not part of the SitemapIndexSlicerInterface.
+The interface doesn't define it because it relies on the fact that concrete implementations can use any 
+"sitemap entries overflow detection system" they want.
+
+In the case of the AuthorSitemapSlice implementation, the author relies on the number of entries per sitemap to 
+test the limit of the sitemap capacity, but another implementor could rely on the file's weight, for instance. 
+
+
 
 
 ### the AuthorSitemapSlice.file method
@@ -279,7 +316,7 @@ You can bind multiple TableBindures to a Sitemap Slice.
 Remember that the Sitemap Slice represents your sitemap file.
 Then the TableBindure represents a table that will feed that particular sitemap file.
 
-You can bind one table to one (base) sitemap, or multiple tables to one (base) sitemap.
+You can bind one table to one base sitemap, or multiple tables to one base sitemap.
 
 Now, all this discussion leads us naturally to the AuthorTableBindure object.
 
@@ -377,6 +414,7 @@ extension).
 
 ```php
 $n = 10000;
+$maxEntriesPerSitemap = 10000;
 
 
 QuickPdo::setConnection(
@@ -400,6 +438,7 @@ AuthorSitemapIndexSlicer::create()
         return 'http://mysite.com/' . basename($fileName);
     })
     ->defaultSliceWidth($n)
+    ->maxSitemapEntries($maxEntriesPerSitemap)
     ->addSitemapSlice(AuthorSitemapSlice::create()
             ->sliceWidth($n)
             ->file('idea.sitemap{n}.xml')

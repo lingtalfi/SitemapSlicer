@@ -2,7 +2,7 @@ dependencies:
     git::/lingtalfi/Bat:1.04
     git::/lingtalfi/SitemapBuilderBox:1.01 (recommended: important)
 ACPCompliantRanges:
-    - 1.0*    
+    - 1.0 - 1.01*    
     
     
     
