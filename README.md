@@ -205,13 +205,13 @@ FFF;
 
 
 We start by importing our objects and call the 
-[bigbang.php](https://github.com/lingtalfi/universe/blob/master/planets/TheScientist/bigbang/bigbang.php)
+[bigbang.php](https://github.com/lingtalfi/TheScientist/blob/master/bigbang/bigbang.php)
  script.<br>
 The bigbang script is the oneliner that one can use to make 
-[BSR-0](https://github.com/lingtalfi/universe/blob/master/planets/BumbleBee/Autoload/convention.bsr0.eng.md)
+[BSR-0](https://github.com/lingtalfi/BumbleBee/blob/master/Autoload/convention.bsr0.eng.md)
 classes available to one's application.<br>
 The oneliner technique is explained in the 
-[portable autoloader](https://github.com/lingtalfi/universe/blob/master/planets/TheScientist/convention.portableAutoloader.eng.md)
+[portable autoloader](https://github.com/lingtalfi/TheScientist/blob/master/convention.portableAutoloader.eng.md)
 document.
 
 Then I define my sliceWidth, n=150000;
