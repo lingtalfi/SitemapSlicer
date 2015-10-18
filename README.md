@@ -540,6 +540,11 @@ FFF;
 
 
 
+Recommendation
+-------------------
+
+You also might be interested by the [SitemapBuilder class](https://github.com/lingtalfi/SitemapBuilderBox)
+
 
 
 
