@@ -548,6 +548,14 @@ You also might be interested by the [SitemapBuilder class](https://github.com/li
 
 
 
+Dependencies
+------------------
+
+- [lingtalfi/Bat 1.04](https://github.com/lingtalfi/Bat)
+- [lingtalfi/SitemapBuilderBox 1.01 recommended](https://github.com/lingtalfi/SitemapBuilderBox)
+
+
+
 
 
  
