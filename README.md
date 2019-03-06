@@ -14,7 +14,7 @@ Install
 ==========
 Using the [uni](https://github.com/lingtalfi/universe-naive-importer) command.
 ```bash
-uni import SitemapSlicer
+uni import Ling/SitemapSlicer
 ```
 
 
@@ -140,11 +140,11 @@ Example 1: convert one table into one sitemap
 <?php
 
 
-use QuickPdo\QuickPdo;
-use SitemapBuilderBox\Objects\Url;
-use SitemapSlicer\SitemapIndexSlicer\AuthorSitemapIndexSlicer;
-use SitemapSlicer\SitemapSlice\AuthorSitemapSlice;
-use SitemapSlicer\TableBindure\AuthorTableBindure;
+use Ling\QuickPdo\QuickPdo;
+use Ling\SitemapBuilderBox\Objects\Url;
+use Ling\SitemapSlicer\SitemapIndexSlicer\AuthorSitemapIndexSlicer;
+use Ling\SitemapSlicer\SitemapSlice\AuthorSitemapSlice;
+use Ling\SitemapSlicer\TableBindure\AuthorTableBindure;
 
 
 

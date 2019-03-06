@@ -1,6 +1,6 @@
 <?php
 
-namespace SitemapSlicer\SitemapRecipient;
+namespace Ling\SitemapSlicer\SitemapRecipient;
 
 /*
  * LingTalfi 2015-10-12
@@ -9,11 +9,11 @@ namespace SitemapSlicer\SitemapRecipient;
  * https://github.com/lingtalfi/SitemapBuilderBox
  * 
  */
-use SitemapBuilderBox\Builder\XmlSitemapBuilder;
-use SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleImageXmlSitemapBuilderPlugin;
-use SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleMobileXmlSitemapBuilderPlugin;
-use SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleVideoXmlSitemapBuilderPlugin;
-use SitemapBuilderBox\Objects\Sitemap;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilder;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleImageXmlSitemapBuilderPlugin;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleMobileXmlSitemapBuilderPlugin;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleVideoXmlSitemapBuilderPlugin;
+use Ling\SitemapBuilderBox\Objects\Sitemap;
 
 class AuthorSitemapRecipient implements SitemapRecipientInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace SitemapSlicer\SitemapRecipient;
+namespace Ling\SitemapSlicer\SitemapRecipient;
 
 /*
  * LingTalfi 2015-10-12

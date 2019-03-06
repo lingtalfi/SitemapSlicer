@@ -1,11 +1,11 @@
 <?php
 
-namespace SitemapSlicer\SitemapIndexSlicer;
+namespace Ling\SitemapSlicer\SitemapIndexSlicer;
 
 /*
  * LingTalfi 2015-10-10
  */
-use SitemapSlicer\SitemapSlice\SitemapSliceInterface;
+use Ling\SitemapSlicer\SitemapSlice\SitemapSliceInterface;
 
 interface SitemapIndexSlicerInterface
 {

@@ -1,19 +1,19 @@
 <?php
 
-namespace SitemapSlicer\SitemapIndexSlicer;
+namespace Ling\SitemapSlicer\SitemapIndexSlicer;
 
 /*
  * LingTalfi 2015-10-10
  */
-use Bat\FileSystemTool;
-use SitemapBuilderBox\Builder\XmlSitemapBuilder;
-use SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleImageXmlSitemapBuilderPlugin;
-use SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleMobileXmlSitemapBuilderPlugin;
-use SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleVideoXmlSitemapBuilderPlugin;
-use SitemapBuilderBox\Objects\SitemapIndex;
-use SitemapBuilderBox\Objects\SitemapIndexSitemap;
-use SitemapSlicer\SitemapRecipient\AuthorSitemapRecipient;
-use SitemapSlicer\SitemapSlice\SitemapSliceInterface;
+use Ling\Bat\FileSystemTool;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilder;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleImageXmlSitemapBuilderPlugin;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleMobileXmlSitemapBuilderPlugin;
+use Ling\SitemapBuilderBox\Builder\XmlSitemapBuilderPlugin\GoogleVideoXmlSitemapBuilderPlugin;
+use Ling\SitemapBuilderBox\Objects\SitemapIndex;
+use Ling\SitemapBuilderBox\Objects\SitemapIndexSitemap;
+use Ling\SitemapSlicer\SitemapRecipient\AuthorSitemapRecipient;
+use Ling\SitemapSlicer\SitemapSlice\SitemapSliceInterface;
 
 class AuthorSitemapIndexSlicer implements SitemapIndexSlicerInterface
 {

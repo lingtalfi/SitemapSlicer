@@ -1,11 +1,11 @@
 <?php
 
-namespace SitemapSlicer\SitemapSlice;
+namespace Ling\SitemapSlicer\SitemapSlice;
 
 /*
  * LingTalfi 2015-10-10
  */
-use SitemapSlicer\TableBindure\TableBindureInterface;
+use Ling\SitemapSlicer\TableBindure\TableBindureInterface;
 
 class AuthorSitemapSlice implements SitemapSliceInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace SitemapSlicer\TableBindure;
+namespace Ling\SitemapSlicer\TableBindure;
 
 /*
  * LingTalfi 2015-10-10
